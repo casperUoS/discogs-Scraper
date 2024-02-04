@@ -1,8 +1,9 @@
 Metadata-Version: 2.1
 Name: discogs_scraper
-Version: 0.6
+Version: 0.9
 Summary: Scrapes discogs website based on urls and then outputs csv
 Home-page: https://github.com/casperUoS/discogs-Scraper
+Download-URL: https://github.com/casperUoS/discogs-Scraper/archive/refs/tags/0.7.tar.gz
 Author: Casper Dancy
 Author-email: casperdancy@gmail.com
 License: MIT

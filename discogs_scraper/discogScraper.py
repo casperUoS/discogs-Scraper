@@ -8,8 +8,11 @@ def getReleases(fileName,dis):
     sub1 = "release/"
     sub2 = "-"
     for line in lines:
-        id = ''.join(line.split(sub1)[1].split(sub2)[0])
-        releases.append(dis.release(id))
+        if len(line.strip()) == 0 :
+            id = ""
+        else:
+            id = ''.join(line.split(sub1)[1].split(sub2)[0])
+            releases.append(dis.release(id))
     return releases
 
 
@@ -147,7 +150,7 @@ def main():
         row.append("\"" + getTracks2(release) + "\"")  # contentsNote 2
         row.append("")  # contentsNote 3
         row.append(release.country)  # country
-        row.append("")  # date (empty for now as there are lots of edge case)
+        row.append(getDate(release))  # date (empty for now as there are lots of edge case)
         row.append("B")  # copycondition code
         row.append("BPI Anti-Piracy Unit Donation")  # Collection
         row.append("No copies to be made without permission of the donor")  # Access
