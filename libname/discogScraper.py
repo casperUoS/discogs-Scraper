@@ -98,42 +98,43 @@ def getDate (release):
     else:
         return str(release.year)
 
-
-d = discogs_client.Client('my_user_agent/1.0', user_token='oZENLBNZAGdNfSaGNEncACkrSPFrdzZLvCTUGslh')
-releases = getReleases("URL.txt",d)
-f = open("output.csv","w")
-f.write("")
-f.close()
-for release in releases:
-    csv = ""
-    row = []
-    row.append("") #shelfmarkCD
-    row.append("") #shelfMarkLP
-    row.append("") #barcode
-    row.append(getCompony(release)) #compony
-    row.append(getLabel(release)) #label
-    row.append(getLabelMatch(release)) #labelMatch
-    row.append(release.title) #title
-    row.append("") #contributer1
-    row.append("") #genre1
-    row.append("") #genre2
-    row.append("") #genre4
-    row.append("")  # genre5
-    row.append(getFormat(release)) #format
-    row.append("") #recording address
-    row.append("\"" + getTracks1(release) + "\"") #contentsNote1
-    row.append("\"" + getTracks2(release) + "\"") #contentsNote 2
-    row.append("") #contentsNote 3
-    row.append(release.country) #country
-    row.append("") #date (empty for now as there are lots of edge case)
-    row.append("B") #copycondition code
-    row.append("BPI Anti-Piracy Unit Donation") #Collection
-    row.append("No copies to be made without permission of the donor") #Access
-    row.append(getBootlegNote(release)) #Boolteg note
-    for item in row:
-        csv += str(item) + ","
-    csv += "\n"
-    f = open("output.csv", "a")
-    f.write(csv)
+def main ():
+    d = discogs_client.Client('my_user_agent/1.0', user_token='oZENLBNZAGdNfSaGNEncACkrSPFrdzZLvCTUGslh')
+    releases = getReleases("URL.txt", d)
+    f = open("output.csv", "w")
+    f.write("")
     f.close()
+    for release in releases:
+        csv = ""
+        row = []
+        row.append("")  # shelfmarkCD
+        row.append("")  # shelfMarkLP
+        row.append("")  # barcode
+        row.append(getCompony(release))  # compony
+        row.append(getLabel(release))  # label
+        row.append(getLabelMatch(release))  # labelMatch
+        row.append(release.title)  # title
+        row.append("")  # contributer1
+        row.append("")  # genre1
+        row.append("")  # genre2
+        row.append("")  # genre4
+        row.append("")  # genre5
+        row.append(getFormat(release))  # format
+        row.append("")  # recording address
+        row.append("\"" + getTracks1(release) + "\"")  # contentsNote1
+        row.append("\"" + getTracks2(release) + "\"")  # contentsNote 2
+        row.append("")  # contentsNote 3
+        row.append(release.country)  # country
+        row.append("")  # date (empty for now as there are lots of edge case)
+        row.append("B")  # copycondition code
+        row.append("BPI Anti-Piracy Unit Donation")  # Collection
+        row.append("No copies to be made without permission of the donor")  # Access
+        row.append(getBootlegNote(release))  # Boolteg note
+        for item in row:
+            csv += str(item) + ","
+        csv += "\n"
+        f = open("output.csv", "a")
+        f.write(csv)
+        f.close()
+
 # print(trackList)
