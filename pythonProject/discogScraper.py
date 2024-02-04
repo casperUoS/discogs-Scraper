@@ -125,7 +125,7 @@ for release in releases:
     row.append("\"" + getTracks2(release) + "\"") #contentsNote 2
     row.append("") #contentsNote 3
     row.append(release.country) #country
-    row.append(getDate(release)) #date
+    row.append("") #date (empty for now as there are lots of edge case)
     row.append("B") #copycondition code
     row.append("BPI Anti-Piracy Unit Donation") #Collection
     row.append("No copies to be made without permission of the donor") #Access
