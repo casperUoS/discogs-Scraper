@@ -32,7 +32,7 @@ def getTracks2(release):
         tracks += release.formats[0]['name'] + "2: "
         count = 0
         for track in release.tracklist:
-            if "2-" in track.position :
+            if "2-" in track.position:
                 break
             else:
                 count += 1
