@@ -12,6 +12,7 @@ def getReleases(fileName,dis):
         releases.append(dis.release(id))
     return releases
 
+
 def getTracks1(release):
     tracks = ""
     if int(release.formats[0]['qty']) > 1:
@@ -21,10 +22,21 @@ def getTracks1(release):
             if "1-" in track.position  :
                 tracks += ".- " + str(track.title)
     else :
-        tracks += release.tracklist[0].title
+        canConnect = False
+        if len(release.tracklist[0].position) == 0:
+            tracks += ""
+        else:
+            tracks += release.tracklist[0].title
         for track in release.tracklist[1:]:
-            tracks += ".- " + str(track.title)
-    return tracks
+            if len(track.position) == 0 :
+                tracks += ""
+            else:
+                if canConnect:
+                    tracks += ".- " + str(track.title)
+                else:
+                    tracks += track.title
+                    canConnect = True
+    return tracks.replace("*","")
 
 def getTracks2(release):
     tracks = ""
@@ -40,14 +52,14 @@ def getTracks2(release):
         for track in release.tracklist[(count + 1):]:
             if "2-" in track.position:
                 tracks += ".- " + str(track.title)
-    return tracks
+    return tracks.replace("*","")
 
 
 def getCompony(release):
     compony = release.labels[0].name
     if 'Not On Label' in compony:
         return ""
-    return compony
+    return "\"" + compony + "\""
 
 def lettersOnly (inputString):
     return ''.join(c for c in inputString if c.isalpha())
@@ -56,23 +68,31 @@ def digitsOnly (inputString):
     return ''.join(c for c in inputString if c.isdigit())
 
 def getLabel(release):
-    compony = release.labels[0].name
+    compony = "\"" + release.labels[0].name + "\""
     if 'Not On Label' in compony:
         compony = ''.join(compony.split('(')[1].split(')')[0])
     catno = ""
-    if any(c.isalpha() for c in release.labels[0].catno):
-        catno += "|b" + lettersOnly(release.labels[0].catno).upper()
-    if any(c.isdigit() for c in release.labels[0].catno):
-        catno += "|c" + digitsOnly(release.labels[0].catno)
+    try:
+        if any(c.isalpha() for c in release.labels[0].data['catno']):
+            catno += "|b" + lettersOnly(release.labels[0].data['catno']).upper()
+        if any(c.isdigit() for c in release.labels[0].data['catno']):
+            catno += "|c" + digitsOnly(release.labels[0].data['catno'])
+    except:
+        catno = ""
     return compony.upper() + catno
 
 
 
 def getLabelMatch (release):
-    compony = release.labels[0].name
+
+    compony = "\"" + release.labels[0].name + "\""
     if 'Not On Label' in compony:
         compony = ''.join(compony.split('(')[1].split(')')[0])
-    return compony.upper().replace(' ', '') + digitsOnly(release.labels[0].catno)
+    try:
+        catno = digitsOnly(release.labels[0].data['catno'])
+    except:
+        catno = ""
+    return compony.upper().replace(' ', '') + catno
 
 def getFormat (release):
     format = release.formats[0]['qty'] + " "
@@ -98,11 +118,13 @@ def getDate (release):
     else:
         return str(release.year)
 
-def main ():
+
+def main():
     d = discogs_client.Client('my_user_agent/1.0', user_token='oZENLBNZAGdNfSaGNEncACkrSPFrdzZLvCTUGslh')
     releases = getReleases("URL.txt", d)
     f = open("output.csv", "w")
-    f.write("")
+    f.write(
+        "shelfmarkCD,shelfMarkLP,barcode,compony,label,labelMatch,title,contributer1,genre1,genre2,genre4,genre5,format,recordingAddress,conntentsNote1,contentsNote2,contentsNote3,country,date,copyConditionCode,Collection,Acess,BootlegNote\n")
     f.close()
     for release in releases:
         csv = ""
@@ -113,7 +135,7 @@ def main ():
         row.append(getCompony(release))  # compony
         row.append(getLabel(release))  # label
         row.append(getLabelMatch(release))  # labelMatch
-        row.append(release.title)  # title
+        row.append("\"" + release.title + "\"")  # title
         row.append("")  # contributer1
         row.append("")  # genre1
         row.append("")  # genre2
